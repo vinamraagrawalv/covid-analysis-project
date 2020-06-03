@@ -2,8 +2,8 @@
 
 # Set url to download data from and then put that data into a directory called data.
 #
-# The example here is for covid data. I don't have a url yet but if you find a data 
+# The example here is for covid data. If you find a data 
 # that you think is good, feel free to add it here or use this template.
-url <- 
+url <- "https://coronavirus.ohio.gov/static/COVIDSummaryData.csv"
 dest_file_covid <- "data/covid.csv"
 download.file(url, destfile = dest_file_covid)

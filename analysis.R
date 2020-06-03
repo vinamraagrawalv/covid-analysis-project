@@ -8,3 +8,4 @@
 library(tidyverse)
 library(ggplot2)
 load("rdata/covid.rda")
+head(covid)
