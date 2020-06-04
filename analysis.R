@@ -9,3 +9,27 @@ library(tidyverse)
 library(ggplot2)
 load("rdata/covid.rda")
 head(covid)
+
+# Creating a new table of data for each county
+# Variables:
+#   total_cases - number of cases in the county
+#   total_death - number of deaths in the county
+#   total_hospital - number of hopsitalized cases in the county
+#   fatality_rate - how many people died out of the number of cases in the county
+covid_grouped_by_county <- covid %>% 
+  group_by(County) %>% 
+  mutate(
+    total_cases = sum(Case.Count),
+    total_death = sum(Death.Count),
+    total_hospital = sum(Hospitalized.Count),
+    fatality_rate = total_death / total_cases
+  ) %>%
+  select(County, total_cases, total_death, total_hospital, fatality_rate) %>%
+  distinct()
+
+# Basic bar plot of deaths in counties that had deaths ordered from greatest 
+# to least
+covid_grouped_by_county %>% 
+  filter(total_death > 0) %>%
+  ggplot(aes(total_death, reorder(County, total_death))) +
+    geom_bar(stat = "identity")
