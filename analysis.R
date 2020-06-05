@@ -58,13 +58,38 @@ covid_grouped_by_county <- covid %>%
 
 # Libby - Basic bar plot of deaths in counties that had deaths ordered from greatest 
 # to least, flipped x and y and with color and titles
-# Vinamra - Added fill argument to aes() for gradient color fill and labs() for 
+# Vinamra - Added fill argument to aes() for region color fill and labs() for 
 # labels since they weren't appearing for me with xlabs, ylabs, and main arguments
-plot <- covid_grouped_by_county %>% 
+county_death_barplot <- covid_grouped_by_county %>% 
   filter(total_death > 10) %>%
   ggplot(aes(y=total_death, x=reorder(County, total_death), fill = region)) +
     geom_bar(stat = "identity") +
-    labs(y = "Total Deaths", x = "County", title = "Ohio Covid-19 Deaths By County", Caption = "*Counties not shown have less than 10 total deaths") +
-    coord_flip() + scale_fill_brewer(palette="Paired")
+    labs(y = "Total Deaths", x = "County", 
+         title = "Ohio Covid-19 Deaths By County", 
+         caption = "*Counties not shown have less than 10 total deaths") +
+    coord_flip() + 
+    scale_fill_brewer(palette="Paired")
+
+# Saving a .png of the total death barplot to the figs directory
+ggsave("figs/county_death_barplot.png")
     
-plot
+county_death_barplot
+
+# Boxplot of the fatality rates separated by region. Red line shows cut off for
+# fatality rates that are considered too high and may be an indication of too
+# little testing.
+county_fatality_boxplot <- covid_grouped_by_county %>% 
+  filter(fatality_rate > 0) %>%
+  ggplot(aes(x = reorder(region, fatality_rate), y = fatality_rate)) +
+  geom_boxplot() +
+  geom_point(aes(col = region)) +
+  labs(y = "Fatality Rate", x = "Region", 
+       title = "Ohio Covid-19 Fatality Rate By Region",
+       caption = "*Only counties with a fatality rate greater than 0 are shown") +
+  geom_hline(color = "red", yintercept = .1) + 
+  scale_colour_brewer(palette="Paired")
+
+# Saving a .png of the boxplot of fatality rates to the figs directory
+ggsave("figs/county_fatality_boxplot.png")
+
+county_fatality_boxplot
