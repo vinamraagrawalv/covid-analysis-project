@@ -33,3 +33,15 @@ covid_grouped_by_county %>%
   filter(total_death > 0) %>%
   ggplot(aes(total_death, reorder(County, total_death))) +
     geom_bar(stat = "identity")
+
+#Libby - Basic bar plot of deaths in counties that had deaths ordered from greatest 
+# to least, flipped x and y and with color and titles
+plot <- covid_grouped_by_county %>% 
+  filter(total_death > 0) %>%
+  ggplot(aes(y=total_death, x=reorder(County, total_death)), xlab = "Total Deaths", ylab = "county", main= "Ohio Covid-19 Deaths By County") +
+    geom_bar(stat = "identity", fill = "steelblue")
+
+plot <- plot + scale_fill_brewer(palette = "Blues")
+plot <- plot + coord_flip() 
+plot
+
