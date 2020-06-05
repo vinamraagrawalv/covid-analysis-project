@@ -34,14 +34,16 @@ covid_grouped_by_county %>%
   ggplot(aes(total_death, reorder(County, total_death))) +
     geom_bar(stat = "identity")
 
-#Libby - Basic bar plot of deaths in counties that had deaths ordered from greatest 
+# Libby - Basic bar plot of deaths in counties that had deaths ordered from greatest 
 # to least, flipped x and y and with color and titles
+# Vinamra - Added fill argument to aes() for gradient color fill and labs() for 
+# labels since they weren't appearing for me with xlabs, ylabs, and main arguments
 plot <- covid_grouped_by_county %>% 
   filter(total_death > 0) %>%
-  ggplot(aes(y=total_death, x=reorder(County, total_death)), xlab = "Total Deaths", ylab = "county", main= "Ohio Covid-19 Deaths By County") +
-    geom_bar(stat = "identity", fill = "steelblue")
-
-plot <- plot + scale_fill_brewer(palette = "Blues")
-plot <- plot + coord_flip() 
+  ggplot(aes(y=total_death, x=reorder(County, total_death), fill = total_death)) +
+    geom_bar(stat = "identity") +
+    labs(y = "Total Deaths", x = "County", title = "Ohio Covid-19 Deaths By County") +
+    coord_flip()
+    
 plot
 
