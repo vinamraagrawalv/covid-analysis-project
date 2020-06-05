@@ -10,6 +10,30 @@ library(ggplot2)
 load("rdata/covid.rda")
 head(covid)
 
+northwest_regions <- c("Allen", "Crawford", "Defiance", "Erie", "Fulton", 
+                       "Hancock", "Hardin", "Henry", "Huron", "Lucas", "Morrow", 
+                       "Ottawa", "Paulding", "Putnam", "Sandusky", "Seneca", 
+                       "Williams", "Wood", "Wyandot", "Marion", "Van Wert")
+
+northeast_regions <- c("Ashland", "Ashtabula", "Columbiana", "Cuyahoga", "Geauga",
+                       "Lake", "Lorain", "Mahoning", "Medina", "Portage", 
+                       "Richland", "Stark", "Summit", "Trumbull", "Wayne")
+
+southwest_regions <- c("Adams", "Auglaize", "Brown", "Butler", "Champaign", 
+                       "Clark", "Clermont", "Clinton", "Darke", "Fayette", 
+                       "Gallia", "Greene", "Hamilton", "Highland", "Logan", 
+                       "Mercer", "Miami", "Montgomery", "Preble", "Shelby", 
+                       "Warren")
+
+southeast_regions <- c("Athens", "Belmont", "Carroll", "Coshocton", "Guernsey", 
+                       "Harrison", "Hocking", "Holmes", "Jackson", "Jefferson", 
+                       "Knox", "Lawrence", "Meigs", "Monroe", "Morgan", 
+                       "Muskingum", "Noble", "Perry", "Pickaway", "Pike", "Ross", 
+                       "Scioto", "Tuscarawas", "Vinton", "Washington")
+
+central_regions <- c("Delaware", "Fairfield", "Franklin", "Licking", "Madison", 
+                     "Union")
+
 # Creating a new table of data for each county
 # Variables:
 #   total_cases - number of cases in the county
@@ -22,17 +46,15 @@ covid_grouped_by_county <- covid %>%
     total_cases = sum(Case.Count),
     total_death = sum(Death.Count),
     total_hospital = sum(Hospitalized.Count),
+    region = ifelse(County %in% northwest_regions, "NW", 
+             ifelse(County %in% northeast_regions, "NE", 
+             ifelse(County %in% southwest_regions, "SW", 
+             ifelse(County %in% southeast_regions, "SE", 
+             ifelse(County %in% central_regions, "CE", NA))))),
     fatality_rate = total_death / total_cases
   ) %>%
-  select(County, total_cases, total_death, total_hospital, fatality_rate) %>%
+  select(County, region, total_cases, total_death, total_hospital, fatality_rate) %>%
   distinct()
-
-# Basic bar plot of deaths in counties that had deaths ordered from greatest 
-# to least
-covid_grouped_by_county %>% 
-  filter(total_death > 0) %>%
-  ggplot(aes(total_death, reorder(County, total_death))) +
-    geom_bar(stat = "identity")
 
 # Libby - Basic bar plot of deaths in counties that had deaths ordered from greatest 
 # to least, flipped x and y and with color and titles
@@ -40,7 +62,7 @@ covid_grouped_by_county %>%
 # labels since they weren't appearing for me with xlabs, ylabs, and main arguments
 plot <- covid_grouped_by_county %>% 
   filter(total_death > 0) %>%
-  ggplot(aes(y=total_death, x=reorder(County, total_death), fill = total_death)) +
+  ggplot(aes(y=total_death, x=reorder(County, total_death), fill = region)) +
     geom_bar(stat = "identity") +
     labs(y = "Total Deaths", x = "County", title = "Ohio Covid-19 Deaths By County") +
     coord_flip()
