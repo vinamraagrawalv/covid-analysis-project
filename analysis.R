@@ -61,10 +61,10 @@ covid_grouped_by_county <- covid %>%
 # Vinamra - Added fill argument to aes() for gradient color fill and labs() for 
 # labels since they weren't appearing for me with xlabs, ylabs, and main arguments
 plot <- covid_grouped_by_county %>% 
-  filter(total_death > 0) %>%
+  filter(total_death > 10) %>%
   ggplot(aes(y=total_death, x=reorder(County, total_death), fill = region)) +
     geom_bar(stat = "identity") +
-    labs(y = "Total Deaths", x = "County", title = "Ohio Covid-19 Deaths By County") +
-    coord_flip()
+    labs(y = "Total Deaths", x = "County", title = "Ohio Covid-19 Deaths By County", Caption = "*Counties not shown have less than 10 total deaths") +
+    coord_flip() + scale_fill_brewer(palette="Paired")
     
 plot
