@@ -46,4 +46,3 @@ plot <- covid_grouped_by_county %>%
     coord_flip()
     
 plot
-
