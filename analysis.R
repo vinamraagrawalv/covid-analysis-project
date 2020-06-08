@@ -79,7 +79,7 @@ covid_grouped_by_age %>%
     geom_col(aes(fill = category))+
     labs(y = "Total Deaths", 
          x = "Age", 
-         title = "Ohio Covid-19 Deaths By Age") +
+         title = "Ohio Covid-19 Cases By Age") +
     geom_text(aes(y = lab_ypos, 
                   label = value, 
                   group = category), 
