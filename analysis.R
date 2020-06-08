@@ -56,6 +56,40 @@ covid_grouped_by_county <- covid %>%
   select(County, region, total_cases, total_death, total_hospital, fatality_rate) %>%
   distinct()
 
+# Create a data frame table of covid cases grouped by age group
+covid_grouped_by_age <- covid %>% 
+  group_by(Age.Range) %>% 
+  mutate(
+    total_cases = sum(Case.Count),
+    total_death = sum(Death.Count),
+    total_hospital = sum(Hospitalized.Count),
+    fatality_rate = total_death / total_cases
+  ) %>%
+  select(Age.Range, total_cases, total_death, total_hospital, fatality_rate) %>%
+  distinct()
+
+# Creates bar plot of cases by age group colored by type of cases with labels
+# for the specific number of cases for each type.
+covid_grouped_by_age %>% 
+  filter(Age.Range != "Unknown") %>%
+  mutate(not_death = total_cases - total_death) %>%
+  gather(category, value, total_death, not_death) %>%
+  mutate(lab_ypos = cumsum(value) + 300) %>%
+  ggplot(aes(x = Age.Range, y = value)) +
+    geom_col(aes(fill = category))+
+    labs(y = "Total Deaths", 
+         x = "Age", 
+         title = "Ohio Covid-19 Deaths By Age") +
+    geom_text(aes(y = lab_ypos, 
+                  label = value, 
+                  group = category), 
+                  color = "black") +
+    scale_fill_discrete(name = "Case Type", 
+                        label = c("Recovered Cases", "Deaths"))
+
+# Saves barplot of cases by age group to figs directory
+ggsave("figs/age_case_type_barplot.png")
+
 # Libby - Basic bar plot of deaths in counties that had deaths ordered from greatest 
 # to least, flipped x and y and with color and titles
 # Vinamra - Added fill argument to aes() for region color fill and labs() for 
@@ -64,7 +98,8 @@ county_death_barplot <- covid_grouped_by_county %>%
   filter(total_death > 10) %>%
   ggplot(aes(y=total_death, x=reorder(County, total_death), fill = region)) +
     geom_bar(stat = "identity") +
-    labs(y = "Total Deaths", x = "County", 
+    labs(y = "Total Deaths", 
+         x = "County", 
          title = "Ohio Covid-19 Deaths By County", 
          caption = "*Counties not shown have less than 10 total deaths") +
     coord_flip() + 
