@@ -11,3 +11,4 @@ File Information:
   download-data.R - downloads csv files to data directory
   wrangle-data.R - creates a derived dataset and saves as an R object in rdata directory
   analysis.R - the analysis of the data; creates figures that are saved in the figs directory
+  population-data-wrangling-function.R - wrangling function for the population data set. The wrangling was put into this file separate from the wrangle-data.R file because the data set required quite a bit of wrangling to work.
