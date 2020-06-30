@@ -2,7 +2,7 @@ Covid Analysis Project
 Authors: Vinamra Agrawal, Camryn Craig, Libby Mannix, & Brittany Shine
 Date: 06/03/2020
 
-This project is an analysis of the publically available COVID-19 data for Columbus, OH. We combine this data with other publically available datasets.
+This project is an analysis of the publically available COVID-19 data for Ohio from the Ohio Department of Health. We combine this data with other publically available datasets.
 
 Data used is available at: 
   covid - https://coronavirus.ohio.gov/static/COVIDSummaryData.csv
